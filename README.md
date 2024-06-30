@@ -30,4 +30,4 @@ This repository contains backend development projects and exercises, focusing on
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/alx-backend.git
+   git clone https://github.com/muhamedhaamdy/alx-backend.git
