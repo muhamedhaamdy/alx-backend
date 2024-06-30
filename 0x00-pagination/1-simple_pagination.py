@@ -41,7 +41,7 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """ Assertions to ensure page and page_size are integers greater than 0"""
+        """ getting the correct page from the dataset """
         assert isinstance(page, int) and page > 0, "page must be an integer greater than 0"
         assert isinstance(page_size, int) and page_size > 0, "page_size must be an integer greater than 0"
         start, end = index_range(page, page_size)
