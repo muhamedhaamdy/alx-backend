@@ -7,9 +7,9 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def welcome() -> str:
+def welcome():
     '''render template'''
-    render_template('0-index.html')
+    return render_template('0-index.html')
 
 
 if __name__ == '__main__':
