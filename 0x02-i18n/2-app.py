@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Simple Flask App module"""
+"""flask babel"""
 from flask import Flask, render_template, request
 from flask_babel import Babel
 
 
 class Config:
-    """Config class for Babel"""
+    """conf class"""
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
@@ -17,14 +17,14 @@ app.config.from_object(Config)
 
 
 @babel.localeselector
-'''get local function'''
 def get_locale():
+    """get locale function"""
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route('/', strict_slashes=False)
-def home() -> str:
-    """renders a simple html file"""
+def home():
+    """render template"""
     return render_template('2-index.html')
 
 
