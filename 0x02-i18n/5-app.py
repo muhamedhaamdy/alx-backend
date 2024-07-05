@@ -1,19 +1,44 @@
 #!/usr/bin/env python3
-"""Simple Flask App module"""
-from flask import Flask, render_template, request, g
+"""
+A Basic flask application
+"""
+from typing import (
+    Dict, Union
+)
+
+from flask import Flask
+from flask import g, request
+from flask import render_template
 from flask_babel import Babel
 
 
-class Config:
-    """Config class for Babel"""
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = "en"
-    BABEL_DEFAULT_TIMEZONE = "UTC"
+class Config(object):
+    """
+    Application configuration class
+    """
+    LANGUAGES = ['en', 'fr']
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 
+# Instantiate the application object
 app = Flask(__name__)
-babel = Babel(app)
 app.config.from_object(Config)
+
+# Wrap the application with Babel
+babel = Babel(app)
+
+
+@babel.localeselector
+def get_locale() -> str:
+    """
+    Gets locale from request object
+    """
+    locale = request.args.get('locale', '').strip()
+    if locale and locale in Config.LANGUAGES:
+        return locale
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
 
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
@@ -23,30 +48,31 @@ users = {
 }
 
 
-def get_user(user_id):
-    '''get user'''
-    return users.get(user_id)
+def get_user(id) -> Union[Dict[str, Union[str, None]], None]:
+    """
+    Validate user login details
+    Args:
+        id (str): user id
+    Returns:
+        (Dict): user dictionary if id is valid else None
+    """
+    return users.get(int(id), 0)
 
 
 @app.before_request
 def before_request():
-    """before_request handler"""
+    """
+    Adds valid user to the global session object `g`
+    """
     setattr(g, 'user', get_user(request.args.get('login_as', 0)))
 
 
-@babel.localeselector
-def get_locale() -> str:
-    """Get locale from request"""
-    local = request.args.get('locale', None)
-    if local and local in Config.LANGUAGES:
-        return local
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
 @app.route('/', strict_slashes=False)
-def home() -> str:
-    """renders a simple html file"""
-    return render_template('3-index.html')
+def index() -> str:
+    """
+    Renders a basic html template
+    """
+    return render_template('5-index.html')
 
 
 if __name__ == '__main__':
